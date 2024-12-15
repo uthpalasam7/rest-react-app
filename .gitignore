@@ -1,0 +1,11 @@
+# Node.js
+server/node_modules/
+
+# React (client-side)
+client/node_modules/
+client/build/
+
+# General ignores
+.DS_Store
+.env
+*.log
