@@ -61,10 +61,22 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-  .connect(
-    MONGODB_URI,
-  )
-  .then(result => {
-    app.listen(8080);
+  .connect(MONGODB_URI)
+  .then(() => {
+    const server = app.listen(8080);
+
+    // Initialize Socket.IO with CORS support
+    const io = require('./socket').init(server, {
+      cors: {
+        origin: 'http://localhost:3000', // React app
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+        credentials: true
+      }
+    });
+
+    io.on('connection', socket => {
+      console.log('Client connected');
+    });
   })
   .catch(err => console.log(err));
